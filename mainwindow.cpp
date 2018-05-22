@@ -3,21 +3,25 @@
 
 #include <QImageReader>
 #include <QMessageBox>
+#include <QLayout>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    cropCanvas(new CropCanvas)
 {
     ui->setupUi(this);
+    ui->verticalLayout_2->addWidget(cropCanvas);
 
     QImageReader r("../photo/sample.jpg");
-    const QImage sampleImg = r.read();
-    if(sampleImg.isNull()) {
-        QMessageBox::information(this,
-                                 QGuiApplication::applicationDisplayName(),
-                                 tr("load failed: %1").arg(r.errorString()));
+    QImage *sampleImg = new QImage();
+    if(!r.read(sampleImg)) {
+        QMessageBox::information(
+                    this,
+                    QGuiApplication::applicationDisplayName(),
+                    tr("load failed: %1").arg(r.errorString()));
     } else {
-        ui->srcImg->setPixmap(QPixmap::fromImage(sampleImg));
+        cropCanvas->loadImage(sampleImg);
     }
 }
 
