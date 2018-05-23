@@ -16,6 +16,10 @@ public:
     RectSelection();
     void resize(const QSize &s);
     void draw(QPainter &painter);
+    //TODO: I may turn these to events if I decide to make selection tool a seperate widget
+    void pressed(const QPoint &pos);
+    void moved(const QPoint &pos);
+    void released(const QPoint &pos);
     //properties
     int getHandleSize() const;
     void setHandleSize(const int size);
@@ -30,13 +34,13 @@ public:
 private:
     QSize minSize;
     bool minSizeSetManually; //if false use handleSize*2 as min
-    void setDefaultMinSize() {
-        minSizeSetManually = false;
-        minSize = QSize((handleSize+1)*2, (handleSize+1)*2);
-    }
+    void setDefaultMinSize();
     int handleSize;
     QRect frame;
     QRect tl, tr, bl, br;
+    enum class Pressed { frame, tl, tr, bl, br, none };
+    Pressed curPressed = Pressed::none;
+    QPoint lastPressedPos;
     void adjustHandlePos();
     void adjustHandleSize();
     QPen penFrame;

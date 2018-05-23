@@ -32,15 +32,22 @@ void CropCanvas::paintEvent(QPaintEvent *event)
 }
 
 void CropCanvas::mousePressEvent(QMouseEvent *event) {
-
+    if(event->button() == Qt::LeftButton) {
+        cropArea.pressed(event->pos());
+    }
 }
 
 void CropCanvas::mouseMoveEvent(QMouseEvent *event) {
-
+    if(event->buttons() & Qt::LeftButton) {
+        cropArea.moved(event->pos());
+    }
+    update();
 }
 
 void CropCanvas::mouseReleaseEvent(QMouseEvent *event) {
-
+    if(event->button() == Qt::LeftButton) {
+        cropArea.released(event->pos());
+    }
 }
 
 //properties - widget should be redrawn after setting visual properties!
