@@ -16,14 +16,7 @@ void CropCanvas::loadImage(QImage *srcImg)
     this->srcImg = srcImg;
 }
 
-void CropCanvas::setZoomAmount(qreal newZoomAmount) {
-    if(newZoomAmount <= 0)
-        zoomAmount = CROP_CANVAS_DEFAULT_ZOOM_AMOUNT;
-    else
-        zoomAmount = newZoomAmount;
-}
-
-
+//events
 void CropCanvas::paintEvent(QPaintEvent *event)
 {
     if(this->srcImg) {
@@ -48,4 +41,67 @@ void CropCanvas::mouseMoveEvent(QMouseEvent *event) {
 
 void CropCanvas::mouseReleaseEvent(QMouseEvent *event) {
 
+}
+
+//properties - widget should be redrawn after setting visual properties!
+qreal CropCanvas::getZoomAmount() const
+{
+    return zoomAmount;
+}
+
+void CropCanvas::setZoomAmount(qreal newZoomAmount) {
+    if(newZoomAmount <= 0)
+        zoomAmount = CROP_CANVAS_DEFAULT_ZOOM_AMOUNT;
+    else
+        zoomAmount = newZoomAmount;
+}
+
+int CropCanvas::getCropAreaHandleSize() const
+{
+    return cropArea.getHandleSize();
+}
+
+void CropCanvas::setCropAreaHandleSize(int size)
+{
+    cropArea.setHandleSize(size);
+}
+
+QSize CropCanvas::getCropAreaMinSize() const
+{
+    return cropArea.getMinSize();
+}
+
+void CropCanvas::setCropAreaMinSize(QSize size)
+{
+    cropArea.setMinSize(size);
+}
+
+QPen CropCanvas::getCropAreaPenFrame() const
+{
+    return cropArea.getPenFrame();
+}
+
+void CropCanvas::setCropAreaPenFrame(const QPen &value)
+{
+    cropArea.setPenFrame(value);
+}
+
+QPen CropCanvas::getCropAreaPenHandle() const
+{
+    return cropArea.getPenHandle();
+}
+
+void CropCanvas::setCropAreaPenHandle(const QPen &value)
+{
+    cropArea.setPenHandle(value);
+}
+
+QBrush CropCanvas::getCropAreaBrushHandle() const
+{
+    return cropArea.getBrushHandle();
+}
+
+void CropCanvas::setCropAreaBrushHandle(const QBrush &value)
+{
+    cropArea.setBrushHandle(value);
 }

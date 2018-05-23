@@ -10,8 +10,19 @@ class CropCanvas : public QWidget
 public:
     explicit CropCanvas(QWidget *parent = nullptr);
     void loadImage(QImage *srcImg);
-    qreal getZoomAmount() const { return zoomAmount; }
+    qreal getZoomAmount() const;
     void setZoomAmount(qreal newZoomAmount);
+    //selection rectangle properties:
+    int getCropAreaHandleSize() const;
+    void setCropAreaHandleSize(int size);
+    QSize getCropAreaMinSize() const;
+    void setCropAreaMinSize(QSize size);
+    QPen getCropAreaPenFrame() const;
+    void setCropAreaPenFrame(const QPen &value);
+    QPen getCropAreaPenHandle() const;
+    void setCropAreaPenHandle(const QPen &value);
+    QBrush getCropAreaBrushHandle() const;
+    void setCropAreaBrushHandle(const QBrush &value);
 signals:
 
 public slots:
