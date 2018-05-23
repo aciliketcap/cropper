@@ -13,6 +13,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->verticalLayout_2->addWidget(cropCanvas);
 
+    cropCanvas->setZoomAmount(2.0);
+
     QImageReader r("../photo/sample.jpg");
     QImage *sampleImg = new QImage();
     if(!r.read(sampleImg)) {

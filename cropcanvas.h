@@ -10,8 +10,8 @@ class CropCanvas : public QWidget
 public:
     explicit CropCanvas(QWidget *parent = nullptr);
     void loadImage(QImage *srcImg);
-    QImage* srcImg;
-    RectSelection cropArea;
+    qreal getZoomAmount() const { return zoomAmount; }
+    void setZoomAmount(qreal newZoomAmount);
 signals:
 
 public slots:
@@ -22,7 +22,9 @@ protected:
     void mouseMoveEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
 private:
-
+    qreal zoomAmount;
+    QImage* srcImg;
+    RectSelection cropArea;
 };
 
 #endif // CROPCANVAS_H
