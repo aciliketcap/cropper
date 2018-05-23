@@ -26,11 +26,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    cropcanvas.cpp
+    cropcanvas.cpp \
+    rectselection.cpp
 
 HEADERS += \
         mainwindow.h \
-    cropcanvas.h
+    cropcanvas.h \
+    rectselection.h
 
 FORMS += \
         mainwindow.ui
