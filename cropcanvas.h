@@ -9,6 +9,7 @@ class CropCanvas : public QWidget
     Q_OBJECT
 public:
     explicit CropCanvas(QWidget *parent = nullptr);
+    ~CropCanvas();
     void loadImage(QImage *srcImg);
     qreal getZoomAmount() const;
     void setZoomAmount(qreal newZoomAmount);

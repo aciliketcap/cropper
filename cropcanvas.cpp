@@ -11,6 +11,11 @@ CropCanvas::CropCanvas(QWidget *parent) :
     zoomAmount = CROP_CANVAS_DEFAULT_ZOOM_AMOUNT;
 }
 
+CropCanvas::~CropCanvas()
+{
+    if(srcImg) delete srcImg;
+}
+
 void CropCanvas::loadImage(QImage *srcImg)
 {
     this->srcImg = srcImg;

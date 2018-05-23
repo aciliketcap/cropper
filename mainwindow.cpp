@@ -30,5 +30,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    delete cropCanvas;
     delete ui;
 }
