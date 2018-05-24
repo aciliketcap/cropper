@@ -24,9 +24,14 @@ public:
     void setCropAreaPenHandle(const QPen &value);
     QBrush getCropAreaBrushHandle() const;
     void setCropAreaBrushHandle(const QBrush &value);
+    QImage *getCroppedImg() const;
+    QPoint getSrcImgPos() const;
+    void setSrcImgPos(const QPoint &value);
+
 signals:
 
 public slots:
+    void crop();
 
 protected:
     void paintEvent(QPaintEvent *event) override;
@@ -35,7 +40,9 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event) override;
 private:
     qreal zoomAmount;
+    QPoint srcImgPos;
     QImage* srcImg;
+    QImage* croppedImg;
     RectSelection cropArea;
 };
 

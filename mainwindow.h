@@ -16,6 +16,9 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+public slots:
+    void cropHandler();
+
 private:
     Ui::MainWindow *ui;
     CropCanvas *cropCanvas;

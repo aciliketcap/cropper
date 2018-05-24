@@ -31,6 +31,8 @@ public:
     void setPenHandle(const QPen &value);
     QBrush getBrushHandle() const;
     void setBrushHandle(const QBrush &value);
+    QRect getFrame() const;
+
 private:
     QSize minSize;
     bool minSizeSetManually; //if false use handleSize*2 as min

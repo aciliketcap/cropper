@@ -132,7 +132,7 @@ void RectSelection::moved(const QPoint &pos)
     }
 }
 
-//TODO: release pressed when moune is moved outside the widget too!
+//TODO: release pressed when mouse is moved outside the widget too!
 void RectSelection::released(const QPoint &pos)
 {
     curPressed = Pressed::none;
@@ -156,6 +156,11 @@ void RectSelection::setHandleSize(const int size) {
 void RectSelection::setDefaultMinSize() {
     minSizeSetManually = false;
     minSize = QSize((handleSize+1)*2, (handleSize+1)*2);
+}
+
+QRect RectSelection::getFrame() const
+{
+    return frame;
 }
 
 QSize RectSelection::getMinSize() const

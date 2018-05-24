@@ -4,6 +4,7 @@
 #include <QImageReader>
 #include <QMessageBox>
 #include <QLayout>
+#include <QLabel>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -12,8 +13,11 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->verticalLayout_2->addWidget(cropCanvas);
+    connect(ui->btnCrop, SIGNAL(clicked()), this, SLOT(cropHandler()));
 
-    cropCanvas->setZoomAmount(2.0);
+    //TODO: do these using transformations
+    //cropCanvas->setZoomAmount(2.0);
+    //cropCanvas->setSrcImgPos(QPoint(40,40));
     cropCanvas->setCropAreaHandleSize(20);
 
     QImageReader r("../photo/sample.jpg");
@@ -32,4 +36,10 @@ MainWindow::~MainWindow()
 {
     delete cropCanvas;
     delete ui;
+}
+
+void MainWindow::cropHandler()
+{
+    cropCanvas->crop();
+    ui->lblCroppedImg->setPixmap(QPixmap::fromImage(*cropCanvas->getCroppedImg()));
 }
