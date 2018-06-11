@@ -17,11 +17,15 @@ public:
     ~MainWindow();
 
 public slots:
+    //TODO: rename and move this to private slots
     void cropHandler();
 
 private:
     Ui::MainWindow *ui;
     CropCanvas *cropCanvas;
+
+private slots:
+    void openSourceFile();
 };
 
 #endif // MAINWINDOW_H
