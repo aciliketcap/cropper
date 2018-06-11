@@ -16,10 +16,6 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-public slots:
-    //TODO: rename and move this to private slots
-    void cropHandler();
-
 private:
     Ui::MainWindow *ui;
     CropCanvas *cropCanvas;

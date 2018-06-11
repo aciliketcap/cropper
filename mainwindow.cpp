@@ -15,7 +15,12 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->verticalLayout_2->addWidget(cropCanvas);
-    connect(ui->btnCrop, SIGNAL(clicked()), this, SLOT(cropHandler()));
+    //configure cropCanvas (hardcoded)
+    cropCanvas->setCropOutput(CropCanvas::ImageCroppedOutput::qPixmap);
+
+    //connect signals inside the code (hardcoded) until I make cropCanvas a custom widget
+    connect(ui->btnCrop, &QPushButton::clicked, cropCanvas, &CropCanvas::crop);
+    connect(cropCanvas, static_cast<void(CropCanvas::*)(QPixmap)>(&CropCanvas::imageCropped), ui->lblCroppedImg, &QLabel::setPixmap);
 
     //TODO: do these using transformations
     //cropCanvas->setZoomAmount(2.0);
@@ -27,12 +32,6 @@ MainWindow::~MainWindow()
 {
     delete cropCanvas;
     delete ui;
-}
-
-void MainWindow::cropHandler()
-{
-    cropCanvas->crop();
-    ui->lblCroppedImg->setPixmap(QPixmap::fromImage(*cropCanvas->getCroppedImg()));
 }
 
 void MainWindow::openSourceFile()

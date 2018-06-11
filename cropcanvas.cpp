@@ -71,9 +71,26 @@ void CropCanvas::setSrcImgPos(const QPoint &value)
     srcImgPos = value;
 }
 
+CropCanvas::ImageCroppedOutput CropCanvas::getCropOutput() const
+{
+    return cropOutput;
+}
+
+void CropCanvas::setCropOutput(const ImageCroppedOutput &value)
+{
+    cropOutput = value;
+}
+
 QImage *CropCanvas::getCroppedImg() const
 {
     return croppedImg;
+}
+
+QPixmap CropCanvas::getCroppedImgPixmap()
+{
+    if(croppedImgPixmap.isNull())
+        croppedImgPixmap = QPixmap::fromImage(*croppedImg);
+    return croppedImgPixmap;
 }
 
 //properties - widget should be redrawn after setting visual properties!
@@ -145,7 +162,26 @@ void CropCanvas::crop()
     //TODO: do these using transformations
     //translatedRect.moveTopLeft((translatedRect.topLeft() - (srcImgPos*zoomAmount)) * 1/zoomAmount);
     //translatedRect.setBottomRight(translatedRect.bottomRight() * 1/zoomAmount);
+
     if(croppedImg) delete croppedImg;
     croppedImg = new QImage(srcImg->copy(translatedRect));
+    if(!croppedImgPixmap.isNull()) {
+        croppedImgPixmap = QPixmap();
+    }
 
+    switch (cropOutput) {
+    case ImageCroppedOutput::qImage:
+        emit imageCropped(*croppedImg);
+        break;
+    case ImageCroppedOutput::qPixmap:
+        croppedImgPixmap = QPixmap::fromImage(*croppedImg);
+        emit imageCropped(croppedImgPixmap);
+        break;
+    case ImageCroppedOutput::both:
+        croppedImgPixmap = QPixmap::fromImage(*croppedImg);
+        emit imageCropped(croppedImgPixmap);
+        emit imageCropped(*croppedImg);
+    default:
+        break;
+    }
 }
