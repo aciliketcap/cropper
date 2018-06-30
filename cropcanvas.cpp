@@ -158,6 +158,8 @@ void CropCanvas::setCropAreaBrushHandle(const QBrush &value)
 
 void CropCanvas::crop()
 {
+    if(!srcImg) return;
+
     QRect translatedRect = cropArea.getFrame();
     //TODO: do these using transformations
     //translatedRect.moveTopLeft((translatedRect.topLeft() - (srcImgPos*zoomAmount)) * 1/zoomAmount);
@@ -171,6 +173,7 @@ void CropCanvas::crop()
 
     switch (cropOutput) {
     case ImageCroppedOutput::qImage:
+        //do not produce a QPixmap until asked
         emit imageCropped(*croppedImg);
         break;
     case ImageCroppedOutput::qPixmap:
