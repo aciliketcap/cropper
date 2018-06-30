@@ -24,6 +24,7 @@ CropCanvas::~CropCanvas()
 void CropCanvas::loadImage(QImage *srcImg)
 {
     this->srcImg = srcImg;
+    update();
 }
 
 //events
