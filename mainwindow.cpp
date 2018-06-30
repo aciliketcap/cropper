@@ -62,7 +62,7 @@ QFileDialog *MainWindow::prepareImageFileDialog(bool isSaveDialog, const QString
     return dialog;
 }
 
-void MainWindow::openSourceFile()
+void MainWindow::openSourceImage()
 {
     auto dialog = prepareImageFileDialog(false, tr("Open Source File"));
 

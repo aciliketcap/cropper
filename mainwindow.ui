@@ -55,20 +55,20 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
-    <addaction name="action_Open_source"/>
+    <addaction name="action_Open_source_Image"/>
     <addaction name="action_Save_cropped_image"/>
    </widget>
    <addaction name="menu_File"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <action name="action_Open_source">
+  <action name="action_Open_source_Image">
    <property name="text">
-    <string>&amp;Open source</string>
+    <string>&amp;Open Source Image</string>
    </property>
   </action>
   <action name="action_Save_cropped_image">
    <property name="text">
-    <string>Save cropped image</string>
+    <string>&amp;Save cropped image</string>
    </property>
   </action>
  </widget>
@@ -76,10 +76,10 @@
  <resources/>
  <connections>
   <connection>
-   <sender>action_Open_source</sender>
+   <sender>action_Open_source_Image</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
-   <slot>openSourceFile()</slot>
+   <slot>openSourceImage()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -109,7 +109,7 @@
   </connection>
  </connections>
  <slots>
-  <slot>openSourceFile()</slot>
+  <slot>openSourceImage()</slot>
   <slot>saveCroppedImage()</slot>
  </slots>
 </ui>

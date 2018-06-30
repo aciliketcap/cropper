@@ -23,7 +23,7 @@ private:
     QFileDialog *prepareImageFileDialog(bool isSaveDialog, const QString &dialogTitle);
 
 private slots:
-    void openSourceFile();
+    void openSourceImage();
     void saveCroppedImage();
 };
 
