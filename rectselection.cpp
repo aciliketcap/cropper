@@ -39,6 +39,14 @@ void RectSelection::resize(const QSize &s) {
     adjustHandlePos();
 }
 
+void RectSelection::reinit()
+{
+    frame.setTopLeft(QPoint(0, 0));
+    resize(QSize(0,0));
+    //frame.setSize(QSize(minSize.width(), minSize.height()));
+    adjustHandlePos();
+}
+
 void RectSelection::draw(QPainter &painter) {
     QPen tmpPen = painter.pen();
     QBrush tmpBrush = painter.brush();

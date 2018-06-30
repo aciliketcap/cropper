@@ -25,6 +25,15 @@ void CropCanvas::loadImage(QImage *srcImg)
 {
     this->srcImg = srcImg;
     update();
+
+    cropArea.reinit();
+    if(croppedImg) {
+        delete croppedImg;
+        croppedImg = nullptr;
+    }
+    if(!croppedImgPixmap.isNull())
+        croppedImgPixmap = QPixmap();
+    emit cropCleared();
 }
 
 //events
@@ -89,7 +98,7 @@ QImage *CropCanvas::getCroppedImg() const
 
 QPixmap CropCanvas::getCroppedImgPixmap()
 {
-    if(croppedImgPixmap.isNull())
+    if(croppedImg && croppedImgPixmap.isNull())
         croppedImgPixmap = QPixmap::fromImage(*croppedImg);
     return croppedImgPixmap;
 }

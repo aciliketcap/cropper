@@ -29,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //connect signals inside the code (hardcoded)
     connect(ui->btnCrop, &QPushButton::clicked, cropCanvas, &CropCanvas::crop);
     connect(cropCanvas, static_cast<void(CropCanvas::*)(QPixmap)>(&CropCanvas::imageCropped), ui->lblCroppedImg, &QLabel::setPixmap);
+    connect(cropCanvas, &CropCanvas::cropCleared, ui->lblCroppedImg, &QLabel::clear);
 }
 
 MainWindow::~MainWindow()

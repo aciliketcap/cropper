@@ -35,6 +35,7 @@ public:
 signals:
     void imageCropped(QImage croppedImg);
     void imageCropped(QPixmap croppedImgPixmap);
+    void cropCleared(); //crop image is removed
 
 public slots:
     void crop();
