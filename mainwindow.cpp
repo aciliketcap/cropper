@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->btnCrop->setEnabled(false);
     //TODO: do these from UI form file after making CropCanvas a custom widget
     ui->verticalLayout_2->addWidget(cropCanvas);
     //configure cropCanvas (hardcoded)
@@ -74,8 +75,10 @@ void MainWindow::openSourceImage()
                         this,
                         QGuiApplication::applicationDisplayName(),
                         tr("Load failed"));
-        else
+        else {
+            ui->btnCrop->setEnabled(true);
             cropCanvas->loadImage(tmpImg);
+        }
     }
 
     delete dialog;
