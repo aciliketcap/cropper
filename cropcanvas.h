@@ -10,7 +10,7 @@ class CropCanvas : public QWidget
 public:
     explicit CropCanvas(QWidget *parent = nullptr);
     ~CropCanvas();
-    void loadImage(QImage *srcImg);
+    void loadImage(QImage srcImg);
     qreal getZoomAmount() const;
     void setZoomAmount(qreal newZoomAmount);
     //selection rectangle properties:
@@ -24,7 +24,7 @@ public:
     void setCropAreaPenHandle(const QPen &value);
     QBrush getCropAreaBrushHandle() const;
     void setCropAreaBrushHandle(const QBrush &value);
-    QImage *getCroppedImg() const;
+    QImage getCroppedImg() const;
     QPixmap getCroppedImgPixmap();
     QPoint getSrcImgPos() const;
     void setSrcImgPos(const QPoint &value);
@@ -48,8 +48,8 @@ protected:
 private:
     qreal zoomAmount;
     QPoint srcImgPos;
-    QImage* srcImg;
-    QImage* croppedImg;
+    QImage srcImg; //implicitly shared object
+    QImage croppedImg; //implicitly shared object
     QPixmap croppedImgPixmap;
     RectSelection cropArea;
     ImageCroppedOutput cropOutput;

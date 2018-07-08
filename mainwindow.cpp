@@ -69,14 +69,14 @@ void MainWindow::openSourceImage()
 
     if(dialog->exec()) {
         QImageReader r(dialog->selectedFiles().first());
-        QImage *sampleImg = new QImage();
-        if(!r.read(sampleImg)) {
+        QImage *tmpImg = new QImage();
+        if(!r.read(tmpImg)) {
             QMessageBox::information(
                         this,
                         QGuiApplication::applicationDisplayName(),
                         tr("load failed: %1").arg(r.errorString()));
         } else {
-            cropCanvas->loadImage(sampleImg);
+            cropCanvas->loadImage(*tmpImg);
         }
     }
 
@@ -85,8 +85,8 @@ void MainWindow::openSourceImage()
 
 void MainWindow::saveCroppedImage()
 {
-    QImage* lastCroppedImage = cropCanvas->getCroppedImg();
-    if(!lastCroppedImage) {
+    QImage lastCroppedImage = cropCanvas->getCroppedImg();
+    if(lastCroppedImage.isNull()) {
         QMessageBox::information(
                     this,
                     QGuiApplication::applicationDisplayName(),
@@ -97,7 +97,7 @@ void MainWindow::saveCroppedImage()
     auto dialog = prepareImageFileDialog(true, tr("Save Cropped Image"));
 
     if(dialog->exec()) {
-        if(!lastCroppedImage->save(dialog->selectedFiles().first())) {
+        if(!lastCroppedImage.save(dialog->selectedFiles().first())) {
             QMessageBox::information(
                         this,
                         QGuiApplication::applicationDisplayName(),

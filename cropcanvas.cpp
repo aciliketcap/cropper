@@ -8,8 +8,6 @@ CropCanvas::CropCanvas(QWidget *parent) :
     QWidget(parent),
     cropArea(RectSelection())
 {
-    srcImg = nullptr;
-    croppedImg = nullptr;
     //TODO: use transformations instead of keeping points and ratios
     srcImgPos = QPoint(0,0);
     zoomAmount = CROP_CANVAS_DEFAULT_ZOOM_AMOUNT;
@@ -17,20 +15,16 @@ CropCanvas::CropCanvas(QWidget *parent) :
 
 CropCanvas::~CropCanvas()
 {
-    if(srcImg) delete srcImg;
-    if(croppedImg) delete croppedImg;
 }
 
-void CropCanvas::loadImage(QImage *srcImg)
+void CropCanvas::loadImage(QImage srcImg)
 {
     this->srcImg = srcImg;
     update();
 
     cropArea.reinit();
-    if(croppedImg) {
-        delete croppedImg;
-        croppedImg = nullptr;
-    }
+    if(!croppedImg.isNull())
+        croppedImg = QImage();
     if(!croppedImgPixmap.isNull())
         croppedImgPixmap = QPixmap();
     emit cropCleared();
@@ -39,12 +33,12 @@ void CropCanvas::loadImage(QImage *srcImg)
 //events
 void CropCanvas::paintEvent(QPaintEvent *event)
 {
-    if(this->srcImg) {
+    if(!this->srcImg.isNull()) {
         QPainter painter(this);
 
         //paint whole widget, not just dirty portion
         painter.scale(zoomAmount, zoomAmount);
-        painter.drawImage(srcImgPos, *srcImg);
+        painter.drawImage(srcImgPos, srcImg);
         painter.scale(1/zoomAmount, 1/zoomAmount);
 
         cropArea.draw(painter);
@@ -91,15 +85,15 @@ void CropCanvas::setCropOutput(const ImageCroppedOutput &value)
     cropOutput = value;
 }
 
-QImage *CropCanvas::getCroppedImg() const
+QImage CropCanvas::getCroppedImg() const
 {
     return croppedImg;
 }
 
 QPixmap CropCanvas::getCroppedImgPixmap()
 {
-    if(croppedImg && croppedImgPixmap.isNull())
-        croppedImgPixmap = QPixmap::fromImage(*croppedImg);
+    if(!croppedImg.isNull() && croppedImgPixmap.isNull())
+        croppedImgPixmap = QPixmap::fromImage(croppedImg);
     return croppedImgPixmap;
 }
 
@@ -168,32 +162,32 @@ void CropCanvas::setCropAreaBrushHandle(const QBrush &value)
 
 void CropCanvas::crop()
 {
-    if(!srcImg) return;
+    if(srcImg.isNull()) return;
 
     QRect translatedRect = cropArea.getFrame();
     //TODO: do these using transformations
     //translatedRect.moveTopLeft((translatedRect.topLeft() - (srcImgPos*zoomAmount)) * 1/zoomAmount);
     //translatedRect.setBottomRight(translatedRect.bottomRight() * 1/zoomAmount);
 
-    if(croppedImg) delete croppedImg;
-    croppedImg = new QImage(srcImg->copy(translatedRect));
-    if(!croppedImgPixmap.isNull()) {
+    croppedImg = srcImg.copy(translatedRect);
+
+    if(!croppedImgPixmap.isNull())
         croppedImgPixmap = QPixmap();
-    }
 
     switch (cropOutput) {
     case ImageCroppedOutput::qImage:
         //do not produce a QPixmap until asked
-        emit imageCropped(*croppedImg);
+        emit imageCropped(croppedImg);
         break;
     case ImageCroppedOutput::qPixmap:
-        croppedImgPixmap = QPixmap::fromImage(*croppedImg);
+        croppedImgPixmap = QPixmap::fromImage(croppedImg);
         emit imageCropped(croppedImgPixmap);
         break;
     case ImageCroppedOutput::both:
-        croppedImgPixmap = QPixmap::fromImage(*croppedImg);
+        croppedImgPixmap = QPixmap::fromImage(croppedImg);
         emit imageCropped(croppedImgPixmap);
-        emit imageCropped(*croppedImg);
+        emit imageCropped(croppedImg);
+        break;
     default:
         break;
     }
