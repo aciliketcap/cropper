@@ -68,16 +68,14 @@ void MainWindow::openSourceImage()
     auto dialog = prepareImageFileDialog(false, tr("Open Source File"));
 
     if(dialog->exec()) {
-        QImageReader r(dialog->selectedFiles().first());
-        QImage *tmpImg = new QImage();
-        if(!r.read(tmpImg)) {
+        QImage tmpImg;
+        if(!tmpImg.load(dialog->selectedFiles().first()))
             QMessageBox::information(
                         this,
                         QGuiApplication::applicationDisplayName(),
-                        tr("load failed: %1").arg(r.errorString()));
-        } else {
-            cropCanvas->loadImage(*tmpImg);
-        }
+                        tr("Load failed"));
+        else
+            cropCanvas->loadImage(tmpImg);
     }
 
     delete dialog;
@@ -101,7 +99,7 @@ void MainWindow::saveCroppedImage()
             QMessageBox::information(
                         this,
                         QGuiApplication::applicationDisplayName(),
-                        tr("save failed")); //no way to get error info?
+                        tr("Save failed")); //no way to get error info?
         }
     }
 
