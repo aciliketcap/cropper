@@ -8,18 +8,18 @@ RectSelection::RectSelection() :
 {
     handleSize = RECT_SELECTION_DEFAULT_HANDLE_SIZE;
     setDefaultMinSize();
-    frame = QRect(QPoint(0,0), minSize);
-    tl = QRect(frame.topLeft(), QSize(handleSize, handleSize));
-    tr = QRect(frame.topRight() - QPoint(handleSize,0), QSize(handleSize, handleSize));
-    br = QRect(frame.bottomRight() - QPoint(handleSize, handleSize), QSize(handleSize, handleSize));
-    bl = QRect(frame.bottomLeft() - QPoint(0, handleSize), QSize(handleSize, handleSize));
+    frame = QRect(QPoint(handleSize, handleSize), minSize);
+    tl = QRect(frame.topLeft() + QPoint(-handleSize, -handleSize), QSize(handleSize, handleSize));
+    tr = QRect(frame.topRight() + QPoint(0, -handleSize), QSize(handleSize, handleSize));
+    br = QRect(frame.bottomRight() + QPoint(-handleSize, 0), QSize(handleSize, handleSize));
+    bl = QRect(frame.bottomLeft() + QPoint(0, 0), QSize(handleSize, handleSize));
 }
 
 void RectSelection::adjustHandlePos(){
-    tl.moveTopLeft(frame.topLeft());
-    tr.moveTopRight(frame.topRight());
-    br.moveBottomRight(frame.bottomRight());
-    bl.moveBottomLeft(frame.bottomLeft());
+    tl.moveBottomRight(frame.topLeft()+QPoint(-1,-1));
+    tr.moveBottomLeft(frame.topRight()+QPoint(1,-1));
+    br.moveTopLeft(frame.bottomRight()+QPoint(1,1));
+    bl.moveTopRight(frame.bottomLeft()+QPoint(-1,1));
 }
 
 void RectSelection::adjustHandleSize()
@@ -30,20 +30,11 @@ void RectSelection::adjustHandleSize()
     bl.setSize(QSize(handleSize, handleSize));
 }
 
-void RectSelection::resize(const QSize &s) {
-    frame.setSize(
-                QSize(
-                    s.width() > minSize.width() ? s.width() : minSize.width(),
-                    s.height() > minSize.height() ? s.height() : minSize.height()
-                    ));
-    adjustHandlePos();
-}
-
+//move the rect to top left and set minimal size
 void RectSelection::reinit()
 {
-    frame.setTopLeft(QPoint(0, 0));
-    resize(QSize(0,0));
-    //frame.setSize(QSize(minSize.width(), minSize.height()));
+    frame.setTopLeft(QPoint(handleSize, handleSize));
+    frame.setSize(minSize);
     adjustHandlePos();
 }
 
@@ -69,14 +60,14 @@ void RectSelection::draw(QPainter &painter) {
 
 void RectSelection::pressed(const QPoint &pos)
 {
-    if(frame.contains(pos)){
-        lastPressedPos = pos;
-        if(tl.contains(pos)) curPressed = Pressed::tl;
-        else if(tr.contains(pos)) curPressed = Pressed::tr;
-        else if(br.contains(pos)) curPressed = Pressed::br;
-        else if(bl.contains(pos)) curPressed = Pressed::bl;
-        else curPressed = Pressed::frame;
-    }
+    if(tl.contains(pos)) curPressed = Pressed::tl;
+    else if(tr.contains(pos)) curPressed = Pressed::tr;
+    else if(br.contains(pos)) curPressed = Pressed::br;
+    else if(bl.contains(pos)) curPressed = Pressed::bl;
+    else if(frame.contains(pos)) curPressed = Pressed::frame;
+    else return;
+
+    lastPressedPos = pos;
 }
 
 void RectSelection::moved(const QPoint &pos)
@@ -89,47 +80,47 @@ void RectSelection::moved(const QPoint &pos)
     switch (curPressed) {
     case Pressed::tl:
         newRect = tl.translated(delta);
-        if(frame.right() - newRect.left() < minSize.width())
-            newRect.moveLeft(frame.right() - minSize.width() + 1);
-        if(frame.bottom() - newRect.top() < minSize.height())
-            newRect.moveTop(frame.bottom() - minSize.height() + 1);
+        if(frame.right() - newRect.right() < minSize.width())
+            newRect.moveRight(frame.right() - minSize.width());
+        if(frame.bottom() - newRect.bottom() < minSize.height())
+            newRect.moveBottom(frame.bottom() - minSize.height());
         tl = newRect;
-        frame.setTopLeft(tl.topLeft());
-        tr.moveTopRight(frame.topRight());
-        bl.moveBottomLeft(frame.bottomLeft());
+        frame.setTopLeft(tl.bottomRight()+QPoint(1,1));
+        tr.moveBottomLeft(frame.topRight()+QPoint(1,-1));
+        bl.moveTopRight(frame.bottomLeft()+QPoint(-1,1));
         break;
     case Pressed::tr:
         newRect = tr.translated(delta);
-        if(newRect.right() - frame.left() < minSize.width())
-            newRect.moveRight(frame.left() + minSize.width() - 1);
-        if(frame.bottom() - newRect.top() < minSize.height())
-            newRect.moveTop(frame.bottom() - minSize.height() + 1);
+        if(newRect.left() - frame.left() < minSize.width())
+            newRect.moveLeft(frame.left() + minSize.width());
+        if(frame.bottom() - newRect.bottom() < minSize.height())
+            newRect.moveBottom(frame.bottom() - minSize.height());
         tr = newRect;
-        frame.setTopRight(tr.topRight());
-        tl.moveTopLeft(frame.topLeft());
-        br.moveBottomRight(frame.bottomRight());
+        frame.setTopRight(tr.bottomLeft()+QPoint(-1,1));
+        tl.moveBottomRight(frame.topLeft()+QPoint(-1,-1));
+        br.moveTopLeft(frame.bottomRight()+QPoint(1,1));
         break;
     case Pressed::br:
         newRect = br.translated(delta);
-        if(newRect.right() - frame.left() < minSize.width())
-            newRect.moveRight(frame.left() + minSize.width() - 1);
-        if(newRect.bottom() - frame.top() < minSize.width())
-            newRect.moveBottom(frame.top() + minSize.height() - 1);
+        if(newRect.left() - frame.left() < minSize.width())
+            newRect.moveLeft(frame.left() + minSize.width());
+        if(newRect.top() - frame.top() < minSize.width())
+            newRect.moveTop(frame.top() + minSize.height());
         br = newRect;
-        frame.setBottomRight(br.bottomRight());
-        tr.moveTopRight(frame.topRight());
-        bl.moveBottomLeft(frame.bottomLeft());
+        frame.setBottomRight(br.topLeft()+QPoint(-1,-1));
+        tr.moveBottomLeft(frame.topRight()+QPoint(1,-1));
+        bl.moveTopRight(frame.bottomLeft()+QPoint(-1,1));
     break;
     case Pressed::bl:
         newRect = bl.translated(delta);
-        if(frame.right() - newRect.left() < minSize.width())
-            newRect.moveLeft(frame.right() - minSize.width() + 1);
-        if(newRect.bottom() - frame.top() < minSize.width())
-            newRect.moveBottom(frame.top() + minSize.height() - 1);
+        if(frame.right() - newRect.right() < minSize.width())
+            newRect.moveRight(frame.right() - minSize.width());
+        if(newRect.top() - frame.top() < minSize.width())
+            newRect.moveTop(frame.top() + minSize.height());
         bl = newRect;
-        frame.setBottomLeft(bl.bottomLeft());
-        tl.moveTopLeft(frame.topLeft());
-        br.moveBottomRight(frame.bottomRight());
+        frame.setBottomLeft(bl.topRight()+QPoint(1,-1));
+        tl.moveBottomRight(frame.topLeft()+QPoint(-1,-1));
+        br.moveTopLeft(frame.bottomRight()+QPoint(1,1));
         break;
     case Pressed::frame:
         frame.translate(delta);
@@ -141,7 +132,7 @@ void RectSelection::moved(const QPoint &pos)
 }
 
 //TODO: release pressed when mouse is moved outside the widget too!
-void RectSelection::released(const QPoint &pos)
+void RectSelection::released(const QPoint& /* pos */)
 {
     curPressed = Pressed::none;
     lastPressedPos = QPoint(0,0);
@@ -158,17 +149,20 @@ void RectSelection::setHandleSize(const int size) {
     if(!minSizeSetManually)
         setDefaultMinSize();
     adjustHandleSize();
-    resize(frame.size());
+    reinit();
 }
 
 void RectSelection::setDefaultMinSize() {
     minSizeSetManually = false;
-    minSize = QSize((handleSize+1)*2, (handleSize+1)*2);
+    minSize = QSize(1,1);
 }
 
 QRect RectSelection::getFrame() const
 {
-    return frame;
+    //return the coordinates relative to the top left of the rectangle containing the image
+    QRect frameOnImage = frame;
+    frameOnImage.moveTopLeft(frame.topLeft() - QPoint(handleSize, handleSize));
+    return frameOnImage;
 }
 
 QSize RectSelection::getMinSize() const

@@ -14,7 +14,6 @@ class RectSelection
 {
 public:
     RectSelection();
-    void resize(const QSize &s);
     void reinit();
     void draw(QPainter &painter);
     //TODO: I may turn these to events if I decide to make selection tool a seperate widget
