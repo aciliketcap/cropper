@@ -9,7 +9,6 @@ This application is put together by following examples in Qt Documentation.
 
 It is lacking a few features I intend to add.
 
- - I need a menu to open the source image and save the cropped image
  - I want to add the ability to zoom on the source image and use scrollbars etc. I did it using basic analytic geometry in my previous widget but I want to use linear transformations this time.
  - I want to add buttons to set min / max size for selection area and locking aspect ratio of the selection area (these were possible in my previous widget).
  - I may add ability to rotate the image / selection area too. It shouldn't be hard if I base everything on transformations.
