@@ -24,10 +24,10 @@ public:
     void setCropAreaPenHandle(const QPen &value);
     QBrush getCropAreaBrushHandle() const;
     void setCropAreaBrushHandle(const QBrush &value);
+    QBrush getBrushSrcImgFrame() const;
+    void setBrushSrcImgFrame(const QBrush &value);
     QImage getCroppedImg() const;
     QPixmap getCroppedImgPixmap();
-    QPoint getSrcImgPos() const;
-    void setSrcImgPos(const QPoint &value);
     enum class ImageCroppedOutput { qImage, qPixmap, both };
     ImageCroppedOutput getCropOutput() const;
     void setCropOutput(const ImageCroppedOutput &value);
@@ -47,10 +47,13 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event) override;
 private:
     qreal zoomAmount;
-    QPoint srcImgPos;
+    int padding;
+    QRect paddingRects[4];
     QImage srcImg; //implicitly shared object
     QImage croppedImg; //implicitly shared object
     QPixmap croppedImgPixmap;
+    QBrush brushSrcImgFrame;
+    QSize canvasSize;
     RectSelection cropArea;
     ImageCroppedOutput cropOutput;
 };

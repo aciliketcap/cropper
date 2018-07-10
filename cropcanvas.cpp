@@ -6,11 +6,13 @@
 
 CropCanvas::CropCanvas(QWidget *parent) :
     QWidget(parent),
-    cropArea(RectSelection())
+    cropArea(RectSelection()),
+    brushSrcImgFrame(Qt::BrushStyle::Dense4Pattern),
+    padding(0),
+    canvasSize(0,0),
+    zoomAmount(CROP_CANVAS_DEFAULT_ZOOM_AMOUNT)
 {
     //TODO: use transformations instead of keeping points and ratios
-    srcImgPos = QPoint(0,0);
-    zoomAmount = CROP_CANVAS_DEFAULT_ZOOM_AMOUNT;
 }
 
 CropCanvas::~CropCanvas()
@@ -19,7 +21,18 @@ CropCanvas::~CropCanvas()
 
 void CropCanvas::loadImage(QImage srcImg)
 {
+    int handleSize = cropArea.getHandleSize();
     this->srcImg = srcImg;
+    this->padding = handleSize;
+    this->canvasSize = QSize(
+                srcImg.width() + handleSize * 2,
+                srcImg.height() + handleSize * 2);
+
+    this->paddingRects[0] = QRect(0, 0, canvasSize.width(), padding);
+    this->paddingRects[1] = QRect(0, padding, padding, srcImg.height());
+    this->paddingRects[2] = QRect(canvasSize.width() - padding, padding, padding, srcImg.height());
+    this->paddingRects[3] = QRect(0, canvasSize.height() - padding, canvasSize.width(), padding);
+
     update();
 
     cropArea.reinit();
@@ -31,17 +44,26 @@ void CropCanvas::loadImage(QImage srcImg)
 }
 
 //events
-void CropCanvas::paintEvent(QPaintEvent *event)
+void CropCanvas::paintEvent(QPaintEvent * /* event */)
 {
     if(!this->srcImg.isNull()) {
-        QPainter painter(this);
-
         //paint whole widget, not just dirty portion
-        painter.scale(zoomAmount, zoomAmount);
-        painter.drawImage(srcImgPos, srcImg);
-        painter.scale(1/zoomAmount, 1/zoomAmount);
+        //TODO: only render necessary region later
+
+        QPainter painter(this);
+        QBrush tmpBrush = painter.brush();
+
+        painter.fillRect(paddingRects[0], brushSrcImgFrame);
+        painter.fillRect(paddingRects[1], brushSrcImgFrame);
+        painter.fillRect(paddingRects[2], brushSrcImgFrame);
+        painter.fillRect(paddingRects[3], brushSrcImgFrame);
+
+        //painter.scale(zoomAmount, zoomAmount);
+        painter.drawImage(padding + 1, padding + 1, srcImg);
+        //painter.scale(1/zoomAmount, 1/zoomAmount);
 
         cropArea.draw(painter);
+        painter.setBrush(tmpBrush);
     }
 }
 
@@ -58,21 +80,20 @@ void CropCanvas::mouseMoveEvent(QMouseEvent *event) {
     update();
 }
 
-
 void CropCanvas::mouseReleaseEvent(QMouseEvent *event) {
     if(event->button() == Qt::LeftButton) {
         cropArea.released(event->pos());
     }
 }
 
-QPoint CropCanvas::getSrcImgPos() const
+QBrush CropCanvas::getBrushSrcImgFrame() const
 {
-    return srcImgPos;
+    return brushSrcImgFrame;
 }
 
-void CropCanvas::setSrcImgPos(const QPoint &value)
+void CropCanvas::setBrushSrcImgFrame(const QBrush &value)
 {
-    srcImgPos = value;
+    brushSrcImgFrame = value;
 }
 
 CropCanvas::ImageCroppedOutput CropCanvas::getCropOutput() const
