@@ -25,6 +25,7 @@ public:
     void setHandleSize(const int size);
     QSize getMinSize() const;
     void setMinSize(const QSize &size);
+    void setCanvasSize(const QSize &value);
     QPen getPenFrame() const;
     void setPenFrame(const QPen &value);
     QPen getPenHandle() const;
@@ -38,6 +39,7 @@ private:
     bool minSizeSetManually; //if false use handleSize*2 as min
     void setDefaultMinSize();
     int handleSize;
+    QSize canvasSize;
     QRect frame;
     QRect tl, tr, bl, br;
     enum class Pressed { frame, tl, tr, bl, br, none };
@@ -48,6 +50,8 @@ private:
     QPen penFrame;
     QPen penHandle;
     QBrush brushHandle;
+    void checkCanvasBounds(QRect &newRect);
+    void checkSrcImgBounds(QRect &newRect);
 };
 
 #endif // RECTSELECTION_H

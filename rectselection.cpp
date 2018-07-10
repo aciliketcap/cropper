@@ -70,6 +70,28 @@ void RectSelection::pressed(const QPoint &pos)
     lastPressedPos = pos;
 }
 
+void RectSelection::checkCanvasBounds(QRect &newRect) {
+    if(newRect.left() < 0)
+        newRect.moveLeft(0);
+    if(newRect.right() > canvasSize.width() - 1)
+        newRect.moveRight(canvasSize.width() - 1);
+    if(newRect.top() < 0)
+        newRect.moveTop(0);
+    if(newRect.bottom() > canvasSize.height() -1)
+        newRect.moveBottom(canvasSize.height() - 1);
+}
+
+void RectSelection::checkSrcImgBounds(QRect &newRect) {
+    if(newRect.left() < handleSize)
+        newRect.moveLeft(handleSize);
+    if(newRect.right() > canvasSize.width() - handleSize - 1)
+        newRect.moveRight(canvasSize.width() - handleSize - 1);
+    if(newRect.top() < handleSize)
+        newRect.moveTop(handleSize);
+    if(newRect.bottom() > canvasSize.height() - handleSize - 1)
+        newRect.moveBottom(canvasSize.height() - handleSize - 1);
+}
+
 void RectSelection::moved(const QPoint &pos)
 {
     if(curPressed == Pressed::none) return;
@@ -77,9 +99,11 @@ void RectSelection::moved(const QPoint &pos)
     QPoint delta = pos - lastPressedPos;
     lastPressedPos = pos;
     QRect newRect;
+    //TODO: max size checks will be added below
     switch (curPressed) {
     case Pressed::tl:
         newRect = tl.translated(delta);
+        checkCanvasBounds(newRect);
         if(frame.right() - newRect.right() < minSize.width())
             newRect.moveRight(frame.right() - minSize.width());
         if(frame.bottom() - newRect.bottom() < minSize.height())
@@ -91,6 +115,7 @@ void RectSelection::moved(const QPoint &pos)
         break;
     case Pressed::tr:
         newRect = tr.translated(delta);
+        checkCanvasBounds(newRect);
         if(newRect.left() - frame.left() < minSize.width())
             newRect.moveLeft(frame.left() + minSize.width());
         if(frame.bottom() - newRect.bottom() < minSize.height())
@@ -102,6 +127,7 @@ void RectSelection::moved(const QPoint &pos)
         break;
     case Pressed::br:
         newRect = br.translated(delta);
+        checkCanvasBounds(newRect);
         if(newRect.left() - frame.left() < minSize.width())
             newRect.moveLeft(frame.left() + minSize.width());
         if(newRect.top() - frame.top() < minSize.width())
@@ -113,6 +139,7 @@ void RectSelection::moved(const QPoint &pos)
     break;
     case Pressed::bl:
         newRect = bl.translated(delta);
+        checkCanvasBounds(newRect);
         if(frame.right() - newRect.right() < minSize.width())
             newRect.moveRight(frame.right() - minSize.width());
         if(newRect.top() - frame.top() < minSize.width())
@@ -123,9 +150,11 @@ void RectSelection::moved(const QPoint &pos)
         br.moveTopLeft(frame.bottomRight()+QPoint(1,1));
         break;
     case Pressed::frame:
-        frame.translate(delta);
+        newRect = frame.translated(delta);
+        checkSrcImgBounds(newRect);
+        frame = newRect;
         adjustHandlePos();
-    break;
+        break;
     default:
         break;
     }
@@ -155,6 +184,11 @@ void RectSelection::setHandleSize(const int size) {
 void RectSelection::setDefaultMinSize() {
     minSizeSetManually = false;
     minSize = QSize(1,1);
+}
+
+void RectSelection::setCanvasSize(const QSize &value)
+{
+    canvasSize = value;
 }
 
 QRect RectSelection::getFrame() const

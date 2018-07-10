@@ -35,6 +35,7 @@ void CropCanvas::loadImage(QImage srcImg)
 
     update();
 
+    cropArea.setCanvasSize(canvasSize);
     cropArea.reinit();
     if(!croppedImg.isNull())
         croppedImg = QImage();
