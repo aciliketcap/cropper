@@ -27,6 +27,7 @@ void CropCanvas::loadImage(QImage srcImg)
     this->canvasSize = QSize(
                 srcImg.width() + handleSize * 2,
                 srcImg.height() + handleSize * 2);
+    this->setMinimumSize(canvasSize);
 
     this->paddingRects[0] = QRect(0, 0, canvasSize.width(), padding);
     this->paddingRects[1] = QRect(0, padding, padding, srcImg.height());

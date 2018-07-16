@@ -8,20 +8,23 @@
 #include <QFileDialog>
 #include <QStandardPaths>
 #include <QImageWriter>
+#include <QScrollArea>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
+    scrollArea(new QScrollArea),
     cropCanvas(new CropCanvas)
 {
     ui->setupUi(this);
 
     ui->btnCrop->setEnabled(false);
     //TODO: do these from UI form file after making CropCanvas a custom widget
-    ui->verticalLayout_2->addWidget(cropCanvas);
     //configure cropCanvas (hardcoded)
     cropCanvas->setCropOutput(CropCanvas::ImageCroppedOutput::qPixmap);
     cropCanvas->setCropAreaHandleSize(20);
+    scrollArea->setWidget(cropCanvas);
+    ui->verticalLayout_2->addWidget(scrollArea);
 
     //TODO: do these using transformations
     //cropCanvas->setZoomAmount(2.0);

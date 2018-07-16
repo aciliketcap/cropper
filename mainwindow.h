@@ -3,6 +3,7 @@
 
 #include <QFileDialog>
 #include <QMainWindow>
+#include <QScrollArea>
 #include "cropcanvas.h"
 
 namespace Ui {
@@ -19,6 +20,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    QScrollArea *scrollArea;
     CropCanvas *cropCanvas;
     QFileDialog *prepareImageFileDialog(bool isSaveDialog, const QString &dialogTitle);
 
