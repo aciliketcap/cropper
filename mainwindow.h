@@ -23,6 +23,7 @@ private:
     QScrollArea *scrollArea;
     CropCanvas *cropCanvas;
     QFileDialog *prepareImageFileDialog(bool isSaveDialog, const QString &dialogTitle);
+    void adjustLblCroppedImageSize(QSize imageSize, QSize areaSize);
 
 private slots:
     void openSourceImage();
