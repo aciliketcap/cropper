@@ -27,6 +27,7 @@ private:
 private slots:
     void openSourceImage();
     void saveCroppedImage();
+    void setCroppedImage(QPixmap croppedImgPixmap);
 };
 
 #endif // MAINWINDOW_H

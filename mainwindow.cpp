@@ -112,3 +112,10 @@ void MainWindow::saveCroppedImage()
     delete dialog;
 }
 
+//we need to adjust the size of the image label too
+void MainWindow::setCroppedImage(QPixmap croppedImgPixmap)
+{
+    return;
+
+}
+
