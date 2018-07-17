@@ -14,7 +14,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     scrollArea(new QScrollArea),
-    cropCanvas(new CropCanvas)
+    cropCanvas(new CropCanvas),
+    arpLabel(new ArpLabel)
 {
     ui->setupUi(this);
 
@@ -25,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
     cropCanvas->setCropAreaHandleSize(20);
     scrollArea->setWidget(cropCanvas);
     ui->verticalLayout_2->addWidget(scrollArea);
+    ui->verticalLayout->addWidget(arpLabel);
 
     //TODO: do these using transformations
     //cropCanvas->setZoomAmount(2.0);
@@ -32,9 +34,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //connect signals inside the code (hardcoded)
     connect(ui->btnCrop, &QPushButton::clicked, cropCanvas, &CropCanvas::crop);
-    //connect(cropCanvas, static_cast<void(CropCanvas::*)(QPixmap)>(&CropCanvas::imageCropped), ui->lblCroppedImg, &QLabel::setPixmap);
-    connect(cropCanvas, static_cast<void(CropCanvas::*)(QPixmap)>(&CropCanvas::imageCropped), this, &MainWindow::setCroppedImage);
-    connect(cropCanvas, &CropCanvas::cropCleared, ui->lblCroppedImg, &QLabel::clear);
+    connect(cropCanvas, static_cast<void(CropCanvas::*)(QPixmap)>(&CropCanvas::imageCropped), arpLabel, &ArpLabel::setPixmap);
+    connect(cropCanvas, &CropCanvas::cropCleared, arpLabel, &ArpLabel::clear);
 }
 
 MainWindow::~MainWindow()
@@ -66,28 +67,6 @@ QFileDialog *MainWindow::prepareImageFileDialog(bool isSaveDialog, const QString
     }
 
     return dialog;
-}
-
-void MainWindow::adjustLblCroppedImageSize(QSize imageSize, QSize areaSize)
-{
-    if(imageSize.width() > areaSize.width()
-            || imageSize.height() > areaSize.height()) {
-        double imgRatio = imageSize.width() / (double) imageSize.height();
-        double areaRatio = areaSize.width() / (double) areaSize.height();
-
-        if(imgRatio < areaRatio) {
-            ui->lblCroppedImg->setMaximumHeight(areaSize.height());
-            ui->lblCroppedImg->setMaximumWidth(areaSize.height() * imgRatio);
-        } else {
-            ui->lblCroppedImg->setMaximumWidth(areaSize.width());
-            ui->lblCroppedImg->setMaximumHeight(areaSize.width() / imgRatio);
-        }
-        ui->lblCroppedImg->setScaledContents(true);
-    } else {
-        //set label size to minimum and disable scaling
-        ui->lblCroppedImg->setMaximumSize(imageSize);
-        ui->lblCroppedImg->setScaledContents(false);
-    }
 }
 
 void MainWindow::openSourceImage()
@@ -133,12 +112,4 @@ void MainWindow::saveCroppedImage()
     }
 
     delete dialog;
-}
-
-//we need to adjust the size of the image label too
-void MainWindow::setCroppedImage(QPixmap croppedImgPixmap)
-{
-    adjustLblCroppedImageSize(croppedImgPixmap.size(), ui->verticalLayout_3->contentsRect().size());
-    ui->lblCroppedImg->setPixmap(croppedImgPixmap);
-    return;
 }

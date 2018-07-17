@@ -27,12 +27,14 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     cropcanvas.cpp \
-    rectselection.cpp
+    rectselection.cpp \
+    arplabel.cpp
 
 HEADERS += \
         mainwindow.h \
     cropcanvas.h \
-    rectselection.h
+    rectselection.h \
+    arplabel.h
 
 FORMS += \
         mainwindow.ui

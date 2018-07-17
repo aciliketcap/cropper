@@ -5,6 +5,7 @@
 #include <QMainWindow>
 #include <QScrollArea>
 #include "cropcanvas.h"
+#include "arplabel.h"
 
 namespace Ui {
 class MainWindow;
@@ -22,13 +23,12 @@ private:
     Ui::MainWindow *ui;
     QScrollArea *scrollArea;
     CropCanvas *cropCanvas;
+    ArpLabel *arpLabel;
     QFileDialog *prepareImageFileDialog(bool isSaveDialog, const QString &dialogTitle);
-    void adjustLblCroppedImageSize(QSize imageSize, QSize areaSize);
 
 private slots:
     void openSourceImage();
     void saveCroppedImage();
-    void setCroppedImage(QPixmap croppedImgPixmap);
 };
 
 #endif // MAINWINDOW_H
