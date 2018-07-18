@@ -71,7 +71,7 @@ QFileDialog *MainWindow::prepareImageFileDialog(bool isSaveDialog, const QString
 
 void MainWindow::openSourceImage()
 {
-    auto dialog = prepareImageFileDialog(false, tr("Open Source File"));
+    auto dialog = prepareImageFileDialog(false, tr("Open Source Image"));
 
     if(dialog->exec()) {
         QImage tmpImg;

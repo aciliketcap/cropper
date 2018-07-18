@@ -67,7 +67,7 @@
   </action>
   <action name="action_Save_cropped_image">
    <property name="text">
-    <string>&amp;Save cropped image</string>
+    <string>&amp;Save Cropped Image</string>
    </property>
   </action>
  </widget>
