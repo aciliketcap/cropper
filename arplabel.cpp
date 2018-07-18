@@ -21,7 +21,7 @@ void ArpLabel::setPixmap(const QPixmap &img)
 
 void ArpLabel::clear()
 {
-    /* not implemented yet */
+    image.clear();
     return;
 }
 
