@@ -15,7 +15,12 @@ Other than that I may add following abilities for selection rectangle:
  - Set minimum / maximum size 
  - Lock aspect ratio
  - Rotation
+ - Stepping one pixel at a time on source image when zoomed in
 
 I want to make the CropCanvas and ARPLabel classes separate QWidgets which you can use in other projects too. If I do that I can port the project to QML.
 
-Finally I want to upload a short video on YouTube highlighting key features.
+CropCanvas gives you a canvas in which you can select and move out rectangular regions of images. It crops exactly what you see inside the selection rectangle. It also prevents you from moving the selection rectangle outside the source image.
+
+ARPLabel (Aspect Ratio Preserving Label) is a QLabel which shows a QPixmap image. However it preserves the aspect ratio of the image when it is scaled down and centers the image horizontally or vertically depending on the shape of the conatiner. It will center the image if the container is bigger than the image.
+
+I want to upload a short video on YouTube highlighting the features of these widgets.
