@@ -7,11 +7,15 @@ This application is put together by following examples in Qt Documentation.
  * Scribble
  * Basic Drawing
 
-It is lacking a few features I intend to add.
+I also read how event system and layout calculations work.
 
- - I want to add the ability to zoom on the source image and use scrollbars etc. I did it using basic analytic geometry in my previous widget but I want to use linear transformations this time.
- - I want to add buttons to set min / max size for selection area and locking aspect ratio of the selection area (these were possible in my previous widget).
- - I may add ability to rotate the image / selection area too. It shouldn't be hard if I base everything on transformations.
- - I won't do this one probably but I could add selecting and cropping in other shapes instead of just a rectangle (like circles or stars etc.) I used SVGs in Qt before, I can add ability to load your own simple crop shapes.
- - I won't add 3Dish transformations since I don't want to figure out UI controls for that, I'd rather use Paint3D in Windows :)
- 
+The next feature I want to add is the ability to zoom in and out on the source image. I did it using basic analytic geometry in Winforms but I want to use linear transformations this time.
+
+Other than that I may add following abilities for selection rectangle:
+ - Set minimum / maximum size 
+ - Lock aspect ratio
+ - Rotation
+
+I want to make the CropCanvas and ARPLabel classes separate QWidgets which you can use in other projects too. If I do that I can port the project to QML.
+
+Finally I want to upload a short video on YouTube highlighting key features.
