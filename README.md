@@ -1,13 +1,13 @@
-This small widget let's you select and crop rectangular portions of image files.
+This small application let's you select and crop rectangular portions of image files.
 
-I wrote a similar widget using Winforms in C# in my previous job. I thought it would be a good example to show that I can code Qt apps in C++.
+I wrote a similar application using Winforms in C# in my previous job. I thought it would be a good example to show that I can code Qt apps in C++.
 
 This application is put together by following examples in Qt Documentation.
  * Image Viewer
  * Scribble
  * Basic Drawing
 
-I also read how event system and layout calculations work.
+I also read how event system and layout calculations work in detail.
 
 The next feature I want to add is the ability to zoom in and out on the source image. I did it using basic analytic geometry in Winforms but I want to use linear transformations this time.
 
