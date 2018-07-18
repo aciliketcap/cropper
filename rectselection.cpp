@@ -73,23 +73,23 @@ void RectSelection::pressed(const QPoint &pos)
 void RectSelection::checkCanvasBounds(QRect &newRect) {
     if(newRect.left() < 0)
         newRect.moveLeft(0);
-    if(newRect.right() > canvasSize.width() - 1)
-        newRect.moveRight(canvasSize.width() - 1);
+    if(newRect.right() > canvasSize.width() - 2)
+        newRect.moveRight(canvasSize.width() - 2);
     if(newRect.top() < 0)
         newRect.moveTop(0);
-    if(newRect.bottom() > canvasSize.height() -1)
-        newRect.moveBottom(canvasSize.height() - 1);
+    if(newRect.bottom() > canvasSize.height() - 2)
+        newRect.moveBottom(canvasSize.height() - 2);
 }
 
 void RectSelection::checkSrcImgBounds(QRect &newRect) {
     if(newRect.left() < handleSize)
         newRect.moveLeft(handleSize);
-    if(newRect.right() > canvasSize.width() - handleSize - 1)
-        newRect.moveRight(canvasSize.width() - handleSize - 1);
+    if(newRect.right() > canvasSize.width() - handleSize - 2)
+        newRect.moveRight(canvasSize.width() - handleSize - 2);
     if(newRect.top() < handleSize)
         newRect.moveTop(handleSize);
-    if(newRect.bottom() > canvasSize.height() - handleSize - 1)
-        newRect.moveBottom(canvasSize.height() - handleSize - 1);
+    if(newRect.bottom() > canvasSize.height() - handleSize - 2)
+        newRect.moveBottom(canvasSize.height() - handleSize - 2);
 }
 
 void RectSelection::moved(const QPoint &pos)
@@ -195,6 +195,7 @@ QRect RectSelection::getFrame() const
 {
     //return the coordinates relative to the top left of the rectangle containing the image
     QRect frameOnImage = frame;
+    frameOnImage.setBottomRight(frameOnImage.bottomRight()-QPoint(1,1)); //take inner part of rect
     frameOnImage.moveTopLeft(frame.topLeft() - QPoint(handleSize, handleSize));
     return frameOnImage;
 }

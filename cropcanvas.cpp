@@ -23,10 +23,10 @@ void CropCanvas::loadImage(QImage srcImg)
 {
     int handleSize = cropArea.getHandleSize();
     this->srcImg = srcImg;
-    this->padding = handleSize;
+    this->padding = handleSize + 1;
     this->canvasSize = QSize(
-                srcImg.width() + handleSize * 2,
-                srcImg.height() + handleSize * 2);
+                srcImg.width() + padding * 2,
+                srcImg.height() + padding * 2);
     this->setMinimumSize(canvasSize);
 
     this->paddingRects[0] = QRect(0, 0, canvasSize.width(), padding);
@@ -61,7 +61,7 @@ void CropCanvas::paintEvent(QPaintEvent * /* event */)
         painter.fillRect(paddingRects[3], brushSrcImgFrame);
 
         //painter.scale(zoomAmount, zoomAmount);
-        painter.drawImage(padding + 1, padding + 1, srcImg);
+        painter.drawImage(padding, padding, srcImg);
         //painter.scale(1/zoomAmount, 1/zoomAmount);
 
         cropArea.draw(painter);
